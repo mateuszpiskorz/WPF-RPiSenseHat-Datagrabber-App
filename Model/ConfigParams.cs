@@ -67,11 +67,7 @@ namespace PiHatWPF.Model
             }
             else
             {
-                IpAddress = defaultIpAdress;
-                IpPort = defaultIpPort;
-                SampleTime = defaultSampleTime;
-                MaxSamples = defaultMaxSamples;
-                ApiVersion = defaultApiVersion;
+                this.SetDefaultConfig();
             }
             
 
@@ -113,6 +109,15 @@ namespace PiHatWPF.Model
                 Debug.WriteLine("Cannot save to config file.");
                 Debug.WriteLine(e);
             } 
+        }
+
+        public void SetDefaultConfig()
+        {
+            IpAddress = defaultIpAdress;
+            IpPort = defaultIpPort;
+            SampleTime = defaultSampleTime;
+            MaxSamples = defaultMaxSamples;
+            ApiVersion = defaultApiVersion;
         }
 
 

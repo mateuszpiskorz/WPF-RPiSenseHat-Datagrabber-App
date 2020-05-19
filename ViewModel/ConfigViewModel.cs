@@ -129,6 +129,16 @@ namespace PiHatWPF.ViewModel
         public void DefaultSettings()
         {
             Console.WriteLine("Default Button Works!");
+            config.SetDefaultConfig();
+            config.SaveConfigToFile();
+
+            IpAddress = config.IpAddress;
+            IpPort = config.IpPort;
+            SampleTime = (config.SampleTime).ToString();
+            MaxSamples = (config.MaxSamples).ToString();
+            ApiVersion = config.ApiVersion;
+
+
         }
 
 
