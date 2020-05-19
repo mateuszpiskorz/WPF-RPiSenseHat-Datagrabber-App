@@ -40,7 +40,7 @@ namespace PiHatWPF.ViewModel
             {
                 if (ipPort != value)
                 {
-                    ipAddress = value;
+                    ipPort = value;
                     OnPropertyChanged("IpPort");
                 }
             }
@@ -123,6 +123,8 @@ namespace PiHatWPF.ViewModel
         public void SaveSettings()
         {
             Debug.WriteLine("Save Button Works!");
+            config = new ConfigParams(ipAddress, ipPort, apiVersion, maxSamples, sampleTime);
+            config.SaveConfigToFile();
         }
         public void DefaultSettings()
         {

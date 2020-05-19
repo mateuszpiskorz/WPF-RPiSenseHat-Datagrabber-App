@@ -46,8 +46,8 @@ namespace PiHatWPF.Model
                             dynamic configJson = JObject.Parse(sr.ReadToEnd());
                             IpAddress = configJson.IpAddress;
                             IpPort = configJson.IpPort;
-                            SampleTime = Int32.Parse(configJson.SampleTime);
-                            MaxSamples = Int32.Parse(configJson.MaxSamples);
+                            SampleTime = configJson.SampleTime;
+                            MaxSamples = configJson.MaxSamples;
                             ApiVersion = configJson.ApiVersion;
                         }
                         catch (Exception e)
@@ -77,11 +77,13 @@ namespace PiHatWPF.Model
 
         }
 
-        public ConfigParams(string _ip, string _ipport, int _st)
+        public ConfigParams(string _ip, string _ipport, string _api, int _ms, int _st)
         {
             IpAddress = _ip;
             IpPort = _ipport; 
             SampleTime = _st;
+            MaxSamples = _ms;
+            ApiVersion = _api;
         }
         private JObject GetJsonObject()
         {
