@@ -10,17 +10,20 @@ namespace PiHatWPF.Model
     {
         static readonly string defaultIpAdress = "192.168.0.14";
         static readonly string defaultIpPort = "8000";
+        static readonly string defaultApiVersion = "1.0.0";
+        public string ApiVersion;
         public string IpAddress;
         public string IpPort;
-        static readonly int sampleTimeDefault = 500;
+        static readonly int defaultSampleTime = 500;
         public int SampleTime;
-        public readonly int MaxSampleNumber = 100;
+        public readonly int defaultMaxSamples = 100;
+        public int MaxSamples;
 
         public double XAxisMax
         {
             get
             {
-                return MaxSampleNumber * SampleTime / 1000.0;
+                return defaultMaxSamples * SampleTime / 1000.0;
 
             }
             private set { }
@@ -30,7 +33,9 @@ namespace PiHatWPF.Model
         {
             IpAddress = defaultIpAdress;
             IpPort = defaultIpPort;
-            SampleTime = sampleTimeDefault;
+            SampleTime = defaultSampleTime;
+            MaxSamples = defaultMaxSamples;
+            ApiVersion = defaultApiVersion;
 
         }
 

@@ -136,7 +136,7 @@ namespace PiHatWPF.ViewModel
             HumidityLineSeries.Points.Add(new DataPoint(t, hum));
             PressureLineSeries.Points.Add(new DataPoint(t, press));
 
-            if (TemperatureLineSeries.Points.Count > Config.MaxSampleNumber || HumidityLineSeries.Points.Count > Config.MaxSampleNumber || PressureLineSeries.Points.Count > Config.MaxSampleNumber)
+            if (TemperatureLineSeries.Points.Count > Config.MaxSamples || HumidityLineSeries.Points.Count > Config.MaxSamples || PressureLineSeries.Points.Count > Config.MaxSamples)
             {
                 TemperatureLineSeries.Points.RemoveAt(0);
                 HumidityLineSeries.Points.RemoveAt(0);
