@@ -98,11 +98,13 @@
                 Content="Save Settings"
                 Margin="10"
                 Width="100"
+                Command="{Binding SaveButton}"
                 HorizontalAlignment="Right"/>
         <Button Grid.Column="1" Grid.Row="7" 
                 Content="Default Settings"
                 Margin="10"
                 Width="130"
+                Command="{Binding DefaultButton}"
                 HorizontalAlignment="Left"/>
 
 

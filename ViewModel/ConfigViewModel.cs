@@ -1,6 +1,8 @@
-﻿using PiHatWPF.Model;
+﻿using PiHatWPF.Commands;
+using PiHatWPF.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +24,7 @@ namespace PiHatWPF.ViewModel
                 if(ipAddress != value)
                 {
                     ipAddress = value;
-                   // OnPropertyChanged("IpAdress");
+                    OnPropertyChanged("IpAdress");
                 }
             }
         }
@@ -98,9 +100,12 @@ namespace PiHatWPF.ViewModel
                 }
             }
         }
+        public ConfigButtonCommand SaveButton { get; set; }
+        public ConfigButtonCommand DefaultButton { get; set; }
         #endregion
         #region Fields
         private ConfigParams config = new ConfigParams();
+        
         #endregion
 
         public ConfigViewModel()
@@ -110,7 +115,20 @@ namespace PiHatWPF.ViewModel
             sampleTime = config.SampleTime;
             maxSamples = config.MaxSamples;
             apiVersion = config.ApiVersion;
+
+            SaveButton = new ConfigButtonCommand(SaveSettings);
+            DefaultButton = new ConfigButtonCommand(DefaultSettings);
         }
+
+        public void SaveSettings()
+        {
+            Debug.WriteLine("Save Button Works!");
+        }
+        public void DefaultSettings()
+        {
+            Console.WriteLine("Default Button Works!");
+        }
+
 
     }
 }

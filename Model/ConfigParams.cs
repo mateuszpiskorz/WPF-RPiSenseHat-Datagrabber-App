@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace PiHatWPF.Model
 {
@@ -31,11 +35,45 @@ namespace PiHatWPF.Model
 
         public ConfigParams()
         {
-            IpAddress = defaultIpAdress;
-            IpPort = defaultIpPort;
-            SampleTime = defaultSampleTime;
-            MaxSamples = defaultMaxSamples;
-            ApiVersion = defaultApiVersion;
+            if (File.Exists("configdata.json"))
+            {
+                try
+                {
+                    using (StreamReader sr = new StreamReader("configdata.json"))
+                    {
+                        try
+                        {
+                            dynamic configJson = JObject.Parse(sr.ReadToEnd());
+                            IpAddress = configJson.IpAddress;
+                            IpPort = configJson.IpPort;
+                            SampleTime = Int32.Parse(configJson.SampleTime);
+                            MaxSamples = Int32.Parse(configJson.MaxSamples);
+                            ApiVersion = configJson.ApiVersion;
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.WriteLine("Json Object Error");
+                            Debug.WriteLine(e);
+                        }
+                       
+                    }
+                }
+                catch (IOException e)
+                {
+                    Debug.WriteLine("Cannot open config file.");
+                    Debug.WriteLine(e);
+                }
+
+            }
+            else
+            {
+                IpAddress = defaultIpAdress;
+                IpPort = defaultIpPort;
+                SampleTime = defaultSampleTime;
+                MaxSamples = defaultMaxSamples;
+                ApiVersion = defaultApiVersion;
+            }
+            
 
         }
 
@@ -45,5 +83,36 @@ namespace PiHatWPF.Model
             IpPort = _ipport; 
             SampleTime = _st;
         }
+        private JObject GetJsonObject()
+        {
+            JObject jsonObj = new JObject(
+                new JProperty("IpAddress", IpAddress),
+                new JProperty("IpPort", IpPort),
+                new JProperty("SampleTime", SampleTime),
+                new JProperty("MaxSamples", MaxSamples),
+                new JProperty("ApiVersion", ApiVersion));
+
+            return jsonObj;
+
+        }
+        public void SaveConfigToFile()
+        {
+            string output = JsonConvert.SerializeObject(GetJsonObject());
+
+            try
+            {
+                using (StreamWriter sw = new StreamWriter("configdata.json"))
+                {
+                    sw.WriteLine(output);
+                }
+            }
+            catch (IOException e)
+            {
+                Debug.WriteLine("Cannot save to config file.");
+                Debug.WriteLine(e);
+            } 
+        }
+
+
     }
 }
