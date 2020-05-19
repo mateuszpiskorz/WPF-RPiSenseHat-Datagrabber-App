@@ -1,0 +1,32 @@
+﻿<Window x:Class="PiHatWPF.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="clr-namespace:PiHatWPF.ViewModel"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="PiHat" Height="450" Width="900">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <!--Menu Grid-->
+        <Grid Grid.Column="0"
+              x:Name="Menu"
+              Background="RoyalBlue">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Width="100" Margin="5" Command="{Binding UpdateViewCommand}" CommandParameter="Charts">CHARTS</Button>
+            <Button Grid.Row="1" Width="100" Margin="5" Command="{Binding UpdateViewCommand}" CommandParameter="Led">LED</Button>
+            <Button Grid.Row="2" Width="100" Margin="5" Command="{Binding UpdateViewCommand}" CommandParameter="Config">CONFIG</Button>
+        </Grid>
+        <Grid Grid.Column="1">
+            <ContentControl Content="{Binding SelectedViewModel}"/>
+        </Grid>
+    </Grid>
+</Window>

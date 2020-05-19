@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="PiHatWPF.View.ChartView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:vm="clr-namespace:PiHatWPF.ViewModel"
+      xmlns:local="clr-namespace:PiHatWPF.View"
+      xmlns:oxy="http://oxyplot.org/wpf"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.DataContext>
+        <vm:ChartsViewModel/>
+    </UserControl.DataContext>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Auto">
+    <Grid ScrollViewer.CanContentScroll="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" MinHeight="300" />
+            <RowDefinition Height="Auto" MinHeight="300"/>
+            <RowDefinition Height="Auto" MinHeight="300"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+        <Label Grid.Row="0" 
+               FontSize="36" 
+               HorizontalAlignment="Center"   
+               Content="Charts"/>
+
+            <oxy:PlotView x:Name="TemperaturePlotView"
+                      Grid.Row="1"
+                          Margin="0,0,10,0"
+                      Model="{Binding TemperaturePlotModel}"/>
+        
+            <oxy:PlotView x:Name="HumidityPlotView"
+                      Grid.Row="2"
+                          Margin="0,0,10,0"
+                      Model="{Binding HumidityPlotModel}"/>
+
+            <oxy:PlotView x:Name="PressurePlotView"
+                      Grid.Row="3"
+                          Margin="0,0,10,0"
+                      Model="{Binding PressurePlotModel}"/>
+
+
+
+
+        </Grid>
+    </ScrollViewer>
+</UserControl>
