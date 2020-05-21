@@ -48,7 +48,10 @@
 
             <Label Content="B:" FontSize="20" Margin="5,5,5,5"/>
             <TextBox Width="100" FontSize="20" Margin="5,5,5,5" Height="30" Text="{Binding BBrush}" />
-            
+
+            <Rectangle Width="30" Height="30"
+                       Fill="{Binding CurrentColor}"/>
+
         </StackPanel>
 
     </Grid>
