@@ -113,7 +113,7 @@ namespace PiHatWPF.ViewModel
        
         
 
-        private ConfigButtonCommand LedClicked;
+        private LedCommand LedClicked;
         #endregion
         public LedViewModel()
         {
@@ -152,7 +152,7 @@ namespace PiHatWPF.ViewModel
                       
                     };
 
-                    LedClicked = new ConfigButtonCommand(LedClickedFunction);
+                    LedClicked = new LedCommand(this, rect);
                     MouseAction action = MouseAction.LeftClick;
                     MouseGesture gesture = new MouseGesture(action);
                     MouseBinding binding = new MouseBinding(LedClicked, gesture);
@@ -190,9 +190,10 @@ namespace PiHatWPF.ViewModel
             return result;
         }
 
-        public void LedClickedFunction()
+        public void LedClickedFunction(Rectangle sender)
         {
-            Console.WriteLine("LedClicked!");
+            Console.WriteLine("LedClicked!" + sender.ToString());
+            sender.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
         }
     }
 }
