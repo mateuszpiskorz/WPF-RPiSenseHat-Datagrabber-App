@@ -20,9 +20,9 @@ namespace PiHatWPF.ViewModel
         public PlotModel TemperaturePlotModel { get; set; }
         public PlotModel HumidityPlotModel { get; set; }
         public PlotModel PressurePlotModel { get; set; }
-        public ChartsButtonCommand StartButton { get; set; }
-        public ChartsButtonCommand StopButton { get; set; }
-        public ChartsButtonCommand ClearButton { get; set; }
+        public ConfigButtonCommand StartButton { get; set; }
+        public ConfigButtonCommand StopButton { get; set; }
+        //public ChartsButtonCommand ClearButton { get; set; }
 
 
         #endregion
@@ -30,6 +30,7 @@ namespace PiHatWPF.ViewModel
         #region Fields
         private int timeStamp = 0;
         private ConfigParams Config = new ConfigParams();
+        private string ipAdress;
         private Timer RequestTimer;
         private IoTServer Server;
         #endregion
@@ -125,6 +126,12 @@ namespace PiHatWPF.ViewModel
 
             PressurePlotModel.Series.Add(new LineSeries() { Title = "Pressure data series", Color = OxyColor.Parse("#FFFF0000") });
             #endregion
+
+            StartButton = new ConfigButtonCommand(StartTimer);
+            StopButton = new ConfigButtonCommand(StopTimer);
+            ipAdress = Config.IpAddress;
+            Server = new IoTServer(ipAdress);
+            
         }
         public void UpdateCharts(double t, double temp, double hum, double press)
         {

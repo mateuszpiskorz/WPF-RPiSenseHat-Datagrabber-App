@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Input;
 using PiHatWPF.Commands;
 using PiHatWPF.Model;
+using System.Diagnostics;
 
 namespace PiHatWPF.ViewModel
 {
@@ -97,13 +98,14 @@ namespace PiHatWPF.ViewModel
         }
 
         public LedButtonCommand ClearButton { get; set; }
-        public LedButtonCommand SaveButton { get; set; }
+        public LedButtonCommand SendButton { get; set; }
         #endregion
         #region Fields
         private Dictionary<Tuple<int, int>, Rectangle> ledMatrix = new Dictionary<Tuple<int, int>, Rectangle>();
         private Dictionary<Tuple<int, int>, byte[]> ledMatrixData = new Dictionary<Tuple<int, int>, byte[]>();
         private List<Rectangle> selectedLeds = new List<Rectangle>();
         private IoTServer Server;
+        private readonly string ip = "192.168.0.20";
         private readonly int initialColor = 5263440;
         private readonly int[] InitialColors = { 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440,
                                                  5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440,
@@ -128,7 +130,9 @@ namespace PiHatWPF.ViewModel
             gBrush = this.IntToRgb(initialColor)[1];
             bBrush = this.IntToRgb(initialColor)[2];
             ClearButton = new LedButtonCommand(ClearLed);
+            SendButton = new LedButtonCommand(SendLed);
             currentColor = new SolidColorBrush(Color.FromRgb(rBrush, gBrush, bBrush));
+            Server = new IoTServer(ip);
             
 
             
@@ -209,8 +213,9 @@ namespace PiHatWPF.ViewModel
             
         }
 
-        public void ClearLed()
+        public async void ClearLed()
         {
+            string serverResponse = null;
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
@@ -219,14 +224,21 @@ namespace PiHatWPF.ViewModel
                     byte[] defaultColor = IntToRgb(initialColor);
                     ledMatrix[pos].Fill = new SolidColorBrush(Color.FromRgb(defaultColor[0],defaultColor[1],defaultColor[2]));
                     ledMatrixData[pos] = defaultColor;
+
                      
                 }
             }
+            serverResponse = await Server.POSTData(ledMatrixData);
         }
 
-        public void SaveLed()
+        public async void SendLed()
         {
-
+            string serverResponse = null;
+            serverResponse = await Server.POSTData(ledMatrixData);
+            Debug.WriteLine(serverResponse);
+            
+            
+           
         }
     }
 }

@@ -81,13 +81,14 @@ namespace PiHatWPF.Model
                     var result = await client.PostAsync(GetScriptUrl(), requestdata);
                     // read response content
                     responsetext = await result.Content.ReadAsStringAsync();
+                    if (String.IsNullOrEmpty(responsetext)) Debug.WriteLine("Empty");
 
                 }
             }
             catch (Exception e)
             {
-                Debug.writeline("network error");
-                Debug.writeline(e);
+                Debug.WriteLine("Network Error");
+                Debug.WriteLine(e);
             }
 
             return responsetext;
