@@ -9,6 +9,7 @@ using System.Windows.Shapes;
 using System.Windows;
 using System.Windows.Input;
 using PiHatWPF.Commands;
+using PiHatWPF.Model;
 
 namespace PiHatWPF.ViewModel
 {
@@ -94,10 +95,15 @@ namespace PiHatWPF.ViewModel
                 }
             }
         }
+
+        public LedButtonCommand ClearButton { get; set; }
+        public LedButtonCommand SaveButton { get; set; }
         #endregion
         #region Fields
         private Dictionary<Tuple<int, int>, Rectangle> ledMatrix = new Dictionary<Tuple<int, int>, Rectangle>();
+        private Dictionary<Tuple<int, int>, byte[]> ledMatrixData = new Dictionary<Tuple<int, int>, byte[]>();
         private List<Rectangle> selectedLeds = new List<Rectangle>();
+        private IoTServer Server;
         private readonly int initialColor = 5263440;
         private readonly int[] InitialColors = { 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440,
                                                  5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440,
@@ -121,6 +127,7 @@ namespace PiHatWPF.ViewModel
             rBrush = this.IntToRgb(initialColor)[0];
             gBrush = this.IntToRgb(initialColor)[1];
             bBrush = this.IntToRgb(initialColor)[2];
+            ClearButton = new LedButtonCommand(ClearLed);
             currentColor = new SolidColorBrush(Color.FromRgb(rBrush, gBrush, bBrush));
             
 
@@ -152,7 +159,7 @@ namespace PiHatWPF.ViewModel
                       
                     };
 
-                    LedClicked = new LedCommand(this, rect);
+                    LedClicked = new LedCommand(this, i, j);
                     MouseAction action = MouseAction.LeftClick;
                     MouseGesture gesture = new MouseGesture(action);
                     MouseBinding binding = new MouseBinding(LedClicked, gesture);
@@ -162,6 +169,7 @@ namespace PiHatWPF.ViewModel
                     Grid.SetColumn(rect, j);
                     grid.Children.Add(rect);
                     ledMatrix.Add(Tuple.Create(i, j), rect);
+                    ledMatrixData.Add(Tuple.Create(i, j), IntToRgb(initialColor));
                 }
             }
 
@@ -190,10 +198,35 @@ namespace PiHatWPF.ViewModel
             return result;
         }
 
-        public void LedClickedFunction(Rectangle sender)
+        public void LedClickedFunction(int x, int y)
         {
-            Console.WriteLine("LedClicked!" + sender.ToString());
-            sender.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+            Tuple<int, int> pos = new Tuple<int, int>(x, y);
+            Console.WriteLine("LED" + x.ToString() + y.ToString() + "Clicked." + pos.ToString());
+            ledMatrix[pos].Fill= currentColor;
+            ledMatrixData[pos][0] = currentColor.Color.R;
+            ledMatrixData[pos][1] = currentColor.Color.G;
+            ledMatrixData[pos][2] = currentColor.Color.B;
+            
+        }
+
+        public void ClearLed()
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    Tuple<int, int> pos = new Tuple<int, int>(i, j);
+                    byte[] defaultColor = IntToRgb(initialColor);
+                    ledMatrix[pos].Fill = new SolidColorBrush(Color.FromRgb(defaultColor[0],defaultColor[1],defaultColor[2]));
+                    ledMatrixData[pos] = defaultColor;
+                     
+                }
+            }
+        }
+
+        public void SaveLed()
+        {
+
         }
     }
 }
