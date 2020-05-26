@@ -17,29 +17,33 @@
     <Grid ScrollViewer.CanContentScroll="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto" MinHeight="300" />
-            <RowDefinition Height="Auto" MinHeight="300"/>
-            <RowDefinition Height="Auto" MinHeight="300"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" MinHeight="300"/>
+            <RowDefinition Height="Auto" MinHeight="300"/>
+            <RowDefinition Height="Auto" MinHeight="300"/>
             <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
         <Label Grid.Row="0" 
                FontSize="36" 
                HorizontalAlignment="Center"   
                Content="Charts"/>
+            <StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
+                <Button Content="Start" Width="100" Height="30" Margin="5" Command="{Binding StartButton}"/>
+                <Button Content="Stop" Width="100" Height="30" Margin="5" Command="{Binding StopButton}"/>
+            </StackPanel>
 
             <oxy:PlotView x:Name="TemperaturePlotView"
-                      Grid.Row="1"
+                      Grid.Row="2"
                           Margin="0,0,10,0"
                       Model="{Binding TemperaturePlotModel}"/>
         
             <oxy:PlotView x:Name="HumidityPlotView"
-                      Grid.Row="2"
+                      Grid.Row="3"
                           Margin="0,0,10,0"
                       Model="{Binding HumidityPlotModel}"/>
 
             <oxy:PlotView x:Name="PressurePlotView"
-                      Grid.Row="3"
+                      Grid.Row="4"
                           Margin="0,0,10,0"
                       Model="{Binding PressurePlotModel}"/>
 

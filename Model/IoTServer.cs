@@ -12,10 +12,12 @@ namespace PiHatWPF.Model
     class IoTServer
     {
         private string ip;
+        private string port;
 
-        public IoTServer(string _ip)
+        public IoTServer(string _ip, string _port)
         {
             ip = _ip;
+            port = _port;
         }
 
         private KeyValuePair<string, string> GetKeyValuePair(Dictionary<Tuple<int, int>, byte[]> data)
@@ -27,7 +29,7 @@ namespace PiHatWPF.Model
 
         private string GetFileUrl()
         {
-            return "http://" + ip + "/chartdata.json";
+            return "http://" + ip +":"+ port + "/chartdata.json";
         }
 
         private string GetScriptUrl()
@@ -73,6 +75,7 @@ namespace PiHatWPF.Model
                         {
                             Tuple<int, int> pos = new Tuple<int, int>(i,j);
                             requestdatacollection.Add(new KeyValuePair<string, string>("[" + i.ToString() + "," + j.ToString()+"]", data[pos].ToString()));
+                            Console.WriteLine(requestdatacollection.ToString());
                         }
                     }
                     

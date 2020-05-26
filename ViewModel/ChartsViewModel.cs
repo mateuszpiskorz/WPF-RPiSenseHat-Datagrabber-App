@@ -31,6 +31,7 @@ namespace PiHatWPF.ViewModel
         private int timeStamp = 0;
         private ConfigParams Config = new ConfigParams();
         private string ipAdress;
+        private string ipPort;
         private Timer RequestTimer;
         private IoTServer Server;
         #endregion
@@ -87,7 +88,7 @@ namespace PiHatWPF.ViewModel
             {
                 Position = AxisPosition.Left,
                 Minimum = 0,
-                Maximum = 40,
+                Maximum = 100,
                 Key = "Vertical",
                 Unit = "%",
                 Title = "Humidity Value"
@@ -96,7 +97,7 @@ namespace PiHatWPF.ViewModel
 
             });
 
-            HumidityPlotModel.Series.Add(new LineSeries() { Title = "Humidity data series", Color = OxyColor.Parse("#FFFF0000") });
+            HumidityPlotModel.Series.Add(new LineSeries() { Title = "Humidity data series", Color = OxyColor.Parse("#FF0000FF") });
 
             PressurePlotModel.Axes.Add(new LinearAxis()
             {
@@ -114,8 +115,8 @@ namespace PiHatWPF.ViewModel
             PressurePlotModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Left,
-                Minimum = 0,
-                Maximum = 40,
+                Minimum = 900,
+                Maximum = 1100,
                 Key = "Vertical",
                 Unit = "hPa",
                 Title = "Pressure Value"
@@ -124,13 +125,14 @@ namespace PiHatWPF.ViewModel
 
             });
 
-            PressurePlotModel.Series.Add(new LineSeries() { Title = "Pressure data series", Color = OxyColor.Parse("#FFFF0000") });
+            PressurePlotModel.Series.Add(new LineSeries() { Title = "Pressure data series", Color = OxyColor.Parse("#FF00FF00") });
             #endregion
 
             StartButton = new ConfigButtonCommand(StartTimer);
             StopButton = new ConfigButtonCommand(StopTimer);
             ipAdress = Config.IpAddress;
-            Server = new IoTServer(ipAdress);
+            ipPort = Config.IpPort;
+            Server = new IoTServer(ipAdress, ipPort);
             
         }
         public void UpdateCharts(double t, double temp, double hum, double press)
@@ -176,7 +178,7 @@ namespace PiHatWPF.ViewModel
             try
             {
                 dynamic responeJson = JObject.Parse(responseText);
-                UpdateCharts(timeStamp / 1000.0, (double)responeJson.temp, (double)responeJson.humi, (double)responeJson.press);
+                UpdateCharts(timeStamp / 1000.0, (double)responeJson.temp, (double)responeJson.hum, (double)responeJson.press);
 
             }
             catch (Exception e)

@@ -105,6 +105,7 @@ namespace PiHatWPF.ViewModel
         private Dictionary<Tuple<int, int>, byte[]> ledMatrixData = new Dictionary<Tuple<int, int>, byte[]>();
         private List<Rectangle> selectedLeds = new List<Rectangle>();
         private IoTServer Server;
+        private ConfigParams Config;
         private readonly string ip = "192.168.0.20";
         private readonly int initialColor = 5263440;
         private readonly int[] InitialColors = { 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440,
@@ -132,7 +133,8 @@ namespace PiHatWPF.ViewModel
             ClearButton = new LedButtonCommand(ClearLed);
             SendButton = new LedButtonCommand(SendLed);
             currentColor = new SolidColorBrush(Color.FromRgb(rBrush, gBrush, bBrush));
-            Server = new IoTServer(ip);
+            Config = new ConfigParams();
+            Server = new IoTServer(Config.IpAddress, Config.IpPort);
             
 
             
