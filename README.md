@@ -6,7 +6,7 @@ Moreover, the application allows to control SenseHat's LED matrix by selecting s
 ### Attention!
 **Application requires server-side API and Python scripts (SenseHat functionality) on RaspberryPi which are not included in this repository.**
 ## Technologies/Patterns
-Windows Presentation Foundation(WPF), OXYplot, MVVM pattern
+Windows Presentation Foundation(WPF), OXYplot, MVVM pattern, C#, XAML
 ## TODOs
 * Improve apperence of  GUI
 * Rewrite for cleaner code
