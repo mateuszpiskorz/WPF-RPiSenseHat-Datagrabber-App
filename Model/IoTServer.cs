@@ -75,10 +75,9 @@ namespace PiHatWPF.Model
                         {
                             Tuple<int, int> pos = new Tuple<int, int>(i,j);
                             requestdatacollection.Add(new KeyValuePair<string, string>("[" + i.ToString() + "," + j.ToString()+"]", data[pos].ToString()));
-                            Console.WriteLine(requestdatacollection.ToString());
+                           
                         }
-                    }
-                    
+                    }       
                     var requestdata = new FormUrlEncodedContent(requestdatacollection);
                     // sent post request
                     var result = await client.PostAsync(GetScriptUrl(), requestdata);

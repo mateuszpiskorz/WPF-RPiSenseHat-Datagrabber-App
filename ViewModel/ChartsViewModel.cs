@@ -51,11 +51,7 @@ namespace PiHatWPF.ViewModel
                 Key = "Horizontal",
                 Unit = "sec",
                 Title = "Time"
-
-
-
             });
-
             TemperaturePlotModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Left,
@@ -64,11 +60,7 @@ namespace PiHatWPF.ViewModel
                 Key = "Vertical",
                 Unit = "C",
                 Title = "Temperature Value"
-
-
-
             });
-
             TemperaturePlotModel.Series.Add(new LineSeries() { Title = "Temperature data series", Color = OxyColor.Parse("#FFFF0000") });
 
             HumidityPlotModel.Axes.Add(new LinearAxis()
