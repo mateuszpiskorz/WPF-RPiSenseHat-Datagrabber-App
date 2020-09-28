@@ -27,7 +27,7 @@ namespace PiHatWPF.Commands
         public void Execute(object parameter)
         {
             switch (parameter)
-            {
+            { 
                 case "Charts":
                     viewModel.SelectedViewModel = new ChartsViewModel();
                     break;
@@ -36,6 +36,12 @@ namespace PiHatWPF.Commands
                     break;
                 case "Led":
                     viewModel.SelectedViewModel = new LedViewModel();
+                    break;
+                case "Data":
+                    viewModel.SelectedViewModel = new DataListViewModel();
+                    break;
+                case "Joystick":
+                    viewModel.SelectedViewModel = new JoystickViewModel();
                     break;
             }
             

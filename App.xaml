@@ -15,6 +15,12 @@
         <DataTemplate DataType="{x:Type vm:LedViewModel}">
             <vw:LedView />
         </DataTemplate>
-         
+        <DataTemplate DataType="{x:Type vm:DataListViewModel}">
+            <vw:DataListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:JoystickViewModel}">
+            <vw:JoystickView/>
+        </DataTemplate>
+        
     </Application.Resources>
 </Application>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -27,14 +28,19 @@ namespace PiHatWPF.Model
             return keyValuePairData;
         }
 
-        private string GetFileUrl()
+        private string GetDataUri()
         {
-            return "http://" + ip +":"+ port + "/chartdata.json";
+            return "http://" + ip +":"+ port + "/?request=GETSens";
         }
 
         private string GetScriptUrl()
         {
-            return "http://" + ip + "/serverscript.php";
+            return "http://" + ip + ":"+ port;
+        }
+
+        private string GetJoystickUri()
+        {
+            return "http://" + ip + ":" + port + "/?request=GETJoy";
         }
 
         public async Task<string> GETData()
@@ -45,7 +51,7 @@ namespace PiHatWPF.Model
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    responseText = await client.GetStringAsync(GetFileUrl());
+                    responseText = await client.GetStringAsync(GetDataUri());
                 }
             }
             catch (Exception e)
@@ -59,7 +65,29 @@ namespace PiHatWPF.Model
             return responseText;
         }
 
-        public async Task<string> POSTData(Dictionary<Tuple<int,int>, byte[]> data)
+        public async Task<string> GETJoystick()
+        {
+            string responseText = null;
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    responseText = await client.GetStringAsync(GetJoystickUri());
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("NETWORK ERROR");
+                Debug.WriteLine(e);
+
+
+            }
+
+            return responseText;
+        }
+
+        public async Task<string> POSTData(int[] data)
         {
             string responsetext = null;
 
@@ -68,20 +96,14 @@ namespace PiHatWPF.Model
                 using (HttpClient client = new HttpClient())
                 {
                     // post request data
-                    var requestdatacollection = new List<KeyValuePair<string,string>>();
-                    for (int i = 0; i < 8; i++)
-                    {
-                        for (int j = 0; j < 8; j++)
-                        {
-                            Tuple<int, int> pos = new Tuple<int, int>(i,j);
-                            requestdatacollection.Add(new KeyValuePair<string, string>("[" + i.ToString() + "," + j.ToString()+"]", data[pos].ToString()));
-                           
-                        }
-                    }       
+                    var jsonLed = JsonConvert.SerializeObject(data);
+                    var requestdatacollection = new Dictionary<string, string>{ {"ledData", jsonLed } };
+
+                    //Debug.WriteLine(requestdatacollection.ToString());
                     var requestdata = new FormUrlEncodedContent(requestdatacollection);
-                    // sent post request
+                    //sent post request
                     var result = await client.PostAsync(GetScriptUrl(), requestdata);
-                    // read response content
+                    //read response content
                     responsetext = await result.Content.ReadAsStringAsync();
                     if (String.IsNullOrEmpty(responsetext)) Debug.WriteLine("Empty");
 

@@ -47,8 +47,14 @@ namespace PiHatWPF.ViewModel
                 {
                     if (rBrush != bytevalue)
                     {
+                        if (bytevalue > 255)
+                            rBrush = 255;
+                        else if (bytevalue < 0)
+                            rBrush = 0;
+                        else
                         rBrush = bytevalue;
-                        CurrentColor = new SolidColorBrush(Color.FromRgb(rBrush, gBrush, bBrush));
+
+                        CurrentColor = new SolidColorBrush(Color.FromArgb(153, rBrush, gBrush, bBrush));
                         OnPropertyChanged("RBrush");
                     }
                 }
@@ -68,8 +74,14 @@ namespace PiHatWPF.ViewModel
                 {
                     if (gBrush != bytevalue)
                     {
+                        if (bytevalue > 255)
+                            gBrush = 255;
+                        else if (bytevalue < 0)
+                            gBrush = 0;
+                        else
                         gBrush = bytevalue;
-                        CurrentColor = new SolidColorBrush(Color.FromRgb(rBrush, gBrush, bBrush));
+
+                        CurrentColor = new SolidColorBrush(Color.FromArgb(153,rBrush, gBrush, bBrush));
                         OnPropertyChanged("GBrush");
                     }
                 }
@@ -89,8 +101,14 @@ namespace PiHatWPF.ViewModel
                 {
                     if (bBrush != bytevalue)
                     {
+                        if (bytevalue > 255)
+                            bBrush = 255;
+                        else if (bytevalue < 0)
+                            bBrush = 0;
+                        else
                         bBrush = bytevalue;
-                        CurrentColor = new SolidColorBrush(Color.FromRgb(rBrush, gBrush, bBrush));
+
+                        CurrentColor = new SolidColorBrush(Color.FromArgb(153,rBrush, gBrush, bBrush));
                         OnPropertyChanged("BBrush");
                     }
                 }
@@ -102,20 +120,20 @@ namespace PiHatWPF.ViewModel
         #endregion
         #region Fields
         private Dictionary<Tuple<int, int>, Rectangle> ledMatrix = new Dictionary<Tuple<int, int>, Rectangle>();
-        private Dictionary<Tuple<int, int>, byte[]> ledMatrixData = new Dictionary<Tuple<int, int>, byte[]>();
+        private int[] ledMatrixData = new int[64];
         private List<Rectangle> selectedLeds = new List<Rectangle>();
         private IoTServer Server;
         private ConfigParams Config;
         private readonly string ip = "192.168.0.20";
-        private readonly int initialColor = 5263440;
-        private readonly int[] InitialColors = { 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440,
-                                                 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440,
-                                                 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440,
-                                                 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440,
-                                                 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440,
-                                                 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440,
-                                                 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440,
-                                                 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440, 5263440};
+        private readonly int initialColor = 0;
+        private readonly int[] InitialColors = { 0, 0, 0, 0, 0, 0, 0, 0,
+                                                 0, 0, 0, 0, 0, 0, 0, 0,
+                                                 0, 0, 0, 0, 0, 0, 0, 0,
+                                                 0, 0, 0, 0, 0, 0, 0, 0,
+                                                 0, 0, 0, 0, 0, 0, 0, 0,
+                                                 0, 0, 0, 0, 0, 0, 0, 0,
+                                                 0, 0, 0, 0, 0, 0, 0, 0,
+                                                 0, 0, 0, 0, 0, 0, 0, 0};
 
         public Grid ViewLedMatrix { get; set; }
 
@@ -132,7 +150,7 @@ namespace PiHatWPF.ViewModel
             bBrush = this.IntToRgb(initialColor)[2];
             ClearButton = new LedButtonCommand(ClearLed);
             SendButton = new LedButtonCommand(SendLed);
-            currentColor = new SolidColorBrush(Color.FromRgb(rBrush, gBrush, bBrush));
+            currentColor = new SolidColorBrush(Color.FromArgb(153, rBrush, gBrush, bBrush));
             Config = new ConfigParams();
             Server = new IoTServer(Config.IpAddress, Config.IpPort);
             
@@ -158,7 +176,7 @@ namespace PiHatWPF.ViewModel
                     grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Auto });
                     Rectangle rect = new Rectangle()
                     {
-                        Fill = new SolidColorBrush(Color.FromRgb((byte)((ledColors[i * 8 + j] >> 16) & 0xFF), (byte)((ledColors[i * 8 + j] >> 8) & 0xFF), (byte)((ledColors[i * 8 + j] >> 0) & 0xFF))),
+                        Fill = new SolidColorBrush(Color.FromArgb(153,(byte)((ledColors[i * 8 + j] >> 16) & 0xFF), (byte)((ledColors[i * 8 + j] >> 8) & 0xFF), (byte)((ledColors[i * 8 + j] >> 0) & 0xFF))),
                         Width = 30,
                         Height = 30,
                         Margin = new Thickness(5, 5, 5, 5),
@@ -175,7 +193,7 @@ namespace PiHatWPF.ViewModel
                     Grid.SetColumn(rect, j);
                     grid.Children.Add(rect);
                     ledMatrix.Add(Tuple.Create(i, j), rect);
-                    ledMatrixData.Add(Tuple.Create(i, j), IntToRgb(initialColor));
+                    ledMatrixData[i*8 + j] = initialColor;
                 }
             }
 
@@ -197,10 +215,10 @@ namespace PiHatWPF.ViewModel
             
         }
 
-        private int RgbToInt(int[] color)
+        private int RgbToInt(byte r, byte g, byte b)
         {
             int result;
-            result = ((color[0] << 16) & 0xFF) | ((color[1] << 8) & 0xFF) | ((color[2 << 0]) & 0xFF);
+            result = (((r & 0x00ff) << 16) ) | (((g & 0x00ff) << 8)) | (((b & 0x00ff)));
             return result;
         }
 
@@ -209,9 +227,8 @@ namespace PiHatWPF.ViewModel
             Tuple<int, int> pos = new Tuple<int, int>(x, y);
             Console.WriteLine("LED" + x.ToString() + y.ToString() + "Clicked." + pos.ToString());
             ledMatrix[pos].Fill= currentColor;
-            ledMatrixData[pos][0] = currentColor.Color.R;
-            ledMatrixData[pos][1] = currentColor.Color.G;
-            ledMatrixData[pos][2] = currentColor.Color.B;
+            ledMatrixData[x * 8 + y] = RgbToInt(currentColor.Color.R, currentColor.Color.G, currentColor.Color.B);
+            
             
         }
 
@@ -224,8 +241,8 @@ namespace PiHatWPF.ViewModel
                 {
                     Tuple<int, int> pos = new Tuple<int, int>(i, j);
                     byte[] defaultColor = IntToRgb(initialColor);
-                    ledMatrix[pos].Fill = new SolidColorBrush(Color.FromRgb(defaultColor[0],defaultColor[1],defaultColor[2]));
-                    ledMatrixData[pos] = defaultColor;
+                    ledMatrix[pos].Fill = new SolidColorBrush(Color.FromArgb(153,defaultColor[0],defaultColor[1],defaultColor[2]));
+                    ledMatrixData[i*8 + j] = RgbToInt(defaultColor[0], defaultColor[1], defaultColor[2]);
 
                      
                 }

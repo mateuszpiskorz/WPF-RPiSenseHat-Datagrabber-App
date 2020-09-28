@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -169,8 +170,8 @@ namespace PiHatWPF.ViewModel
 
             try
             {
-                dynamic responeJson = JObject.Parse(responseText);
-                UpdateCharts(timeStamp / 1000.0, (double)responeJson.temp, (double)responeJson.hum, (double)responeJson.press);
+                var responseJson = await GetResponseCollection(responseText);
+                UpdateCharts(timeStamp / 1000.0, responseJson.Find(item => item.Name == "Temperature").Value, responseJson.Find(item => item.Name == "Humidity").Value, responseJson.Find(item => item.Name == "Pressure").Value);
 
             }
             catch (Exception e)
@@ -182,6 +183,24 @@ namespace PiHatWPF.ViewModel
 
             }
             timeStamp += Config.SampleTime;
+        }
+
+        private async Task<List<SensorDataModel>> GetResponseCollection(string responseString)
+        {
+            List<SensorDataModel> data = null;
+
+            try
+            {
+                data = await Task.Run(() => JsonConvert.DeserializeObject<List<SensorDataModel>>(responseString));
+
+            }
+            catch (JsonSerializationException e)
+            {
+                Debug.WriteLine("Err: Json Collection deserializing");
+                Debug.WriteLine(e);
+            }
+
+            return data;
         }
         private void RequestTimerElapsed(object sender, ElapsedEventArgs e)
         {

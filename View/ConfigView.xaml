@@ -40,6 +40,7 @@
         <TextBox Grid.Row="1" Grid.Column="1" 
                  HorizontalAlignment="Left"
                  Width="300"
+                 FontSize="20"
                  Margin="10"
                  Text="{Binding IpAddress}"/>
 
@@ -51,6 +52,7 @@
         <TextBox Grid.Row="2" Grid.Column="1" 
                  HorizontalAlignment="Left"
                  Width="300"
+                 FontSize="20"
                  Margin="10"
                  Text="{Binding IpPort}"/>
 
@@ -62,6 +64,7 @@
         <TextBox Grid.Row="3" Grid.Column="1" 
                  HorizontalAlignment="Left"
                  Width="300"
+                 FontSize="20"
                  Margin="10"
                  Text="{Binding ApiVersion}"/>
 
@@ -80,6 +83,7 @@
         <TextBox Grid.Row="5" Grid.Column="1" 
                  HorizontalAlignment="Left"
                  Width="300"
+                 FontSize="20"
                  Margin="10"
                  Text="{Binding SampleTime}"/>
 
@@ -91,6 +95,7 @@
         <TextBox Grid.Row="6" Grid.Column="1" 
                  HorizontalAlignment="Left"
                  Width="300"
+                 FontSize="20"
                  Margin="10"
                  Text="{Binding MaxSamples}"/>
 
